@@ -1,0 +1,49 @@
+<?php
+
+	echo "Approching contact.php";
+	if(empty($_POST['name']) || empty($_POST['email']) || empty($_POST['subject']) || empty($_POST['message']))
+	{
+			echo "All fields are required"; //can change the error message here
+	}
+	else
+	{
+	$name=filter_var($_POST['name'],FILTER_SANITIZE_STRING);
+	$designation=filter_var($_POST['designation'],FILTER_SANITIZE_STRING);
+	$email=filter_var($_POST['email'],FILTER_SANITIZE_EMAIL);
+	$message=filter_var($_POST['message'],FILTER_SANITIZE_STRING);
+	$phone = filter_var($_POST['phone'],FILTER_SANITIZE_STRING);
+echo "$name'";
+
+require 'mailer/PHPMailerAutoload.php';
+
+$mail = new PHPMailer;
+
+//$mail->SMTPDebug = 3;                               // Enable verbose debug output
+
+$mail->isSMTP();                                      // Set mailer to use SMTP
+$mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
+$mail->SMTPAuth = true;                               // Enable SMTP authentication
+$mail->Username = 'emailid';                 // SMTP username
+$mail->Password = 'password';                           // SMTP password
+$mail->SMTPSecure = 'ssl';                            // Enable TLS encryption, `ssl` also accepted
+$mail->Port = 465;                                    // TCP port to connect to
+
+$mail->setFrom('gowtham@powerupcloud.com', 'Cloud Mover');
+$mail->addAddress('gowtham@powerupcloud.com','Cloud Mover');     // Add a recipient
+$mail->isHTML(true);                                  // Set email format to HTML
+
+$mail->Subject = $designation + " || Phone : " +$phone+" || Email : "+$email;
+$mail->Body    = $message;
+
+if(!$mail->send()) {
+    echo 'Message could not be sent.';
+    echo 'Mailer Error: ' . $mail->ErrorInfo;
+} else {
+    echo 'Message has been sent';
+}
+}
+
+
+
+?>
+
